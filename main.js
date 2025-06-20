@@ -84,7 +84,7 @@ function appendInput(char) {
 }
 
 function isDigit(char) {
-    return char >= 0 && char < 10;
+    return char >= 0 && char < 10 && char !== " ";
 }
 
 function lastCharWasDigit() {
