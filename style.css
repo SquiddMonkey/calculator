@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+    font-family: 'Roboto';
+    font-size: 64px;
+    justify-content: center;
+    align-items: center;
+    background-color: #071013;
+    color: #efefef;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: solid lime 2px; */
+}
+
+.calculator {
+    /* border: solid red 2px; */
+    /* padding: 12px; */
+    border-radius: 8px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+.buttons div {
+    display: flex;
+    gap: 0px;
+}
+
+.answer-box {
+    max-width: 400px;
+    padding: 0 8px;
+    font-size: 72px;
+    font-weight: 300;
+    text-align: right;
+    overflow: auto;
+    white-space: nowrap;
+    box-shadow: inset;
+}
+
+button {
+    height: 104px;
+    width: 104px;
+    font-weight: 200;
+    border-radius: 12px;
+    border-style: solid;
+    background-color: #150578;
+}
+
+.symbol {
+    background-color: #192BC2;
+    font-weight: 300;
+}
