@@ -1,1 +1,1 @@
-This calculator contains all basic math functions, with clear and delete buttons, and keyboard support.
+This calculator contains all basic math functions, provides 'clear' and 'delete' buttons, and has keyboard support as well.
