@@ -15,8 +15,6 @@ document.addEventListener("keydown", (event) => {
     const key = event.key;
     pressedKeys[key] = true;
 
-    console.log("Key: " + key); // delete
-
     handleInput(key);
 })
 
@@ -62,7 +60,7 @@ function isValidInput(char) {
 }
 
 function appendInput(char) {
-    if (isDigit(char)) {
+    if (isDigit(char) && !lastCharIsPercent()) {
         if (input === "0" || input === "Infinity") {
             input = "";
         }
@@ -77,7 +75,7 @@ function appendInput(char) {
         input += char;
     }
 
-    if (char === "." && !numberContainsDecimal()) {
+    if (char === "." && !numberContainsDecimal() &&!lastCharIsPercent()) {
         if (lastCharIsOperator()) {
             input += "0";
         }
@@ -85,6 +83,7 @@ function appendInput(char) {
     }
 
     if (char === "=" || char === "Enter") {
+        evaluateAllPercents();
         input = eval(input).toString();
     }
 
@@ -95,13 +94,17 @@ function appendInput(char) {
         if (lastCharIsOperator()) {
             input = input.slice(0, -3);
         }
-        else if(lastCharIsDigit) {
+        else if(lastCharIsDigit() || lastCharIsDecimal() || lastCharIsPercent()) {
             input = input.slice(0, -1);
         }
     }
 
     setEmptyInputToZero();
     answerBox.textContent = input;
+}
+
+function evaluateAllPercents() {
+    input = input.replace(/%/g, "/100");
 }
 
 function numberContainsDecimal() {
