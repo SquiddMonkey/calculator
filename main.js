@@ -3,7 +3,6 @@ const buttons = document.querySelectorAll(".buttons button");
 const pressedKeys = {};
 
 let input;
-let decimalAvailable = true;
 input = answerBox.textContent;
 
 buttons.forEach(button => {
@@ -68,13 +67,14 @@ function appendInput(char) {
         input += +char;
     }
 
-    if (isOperator(char) && lastCharWasDigit()) {
-        decimalAvailable = true;
+    if (isOperator(char) && (lastCharIsDigit() || lastCharIsDecimal())) {
         input += " " + char + " ";
     }
 
-    if (char === "." && decimalAvailable) {
-        decimalAvailable = false;
+    if (char === "." && !numberContainsDecimal()) {
+        if (lastCharIsOperator()) {
+            input += "0";
+        }
         input += char;
     }
 
@@ -89,13 +89,25 @@ function appendInput(char) {
         if (lastCharIsOperator()) {
             input = input.slice(0, -3);
         }
-        else if(lastCharWasDigit) {
+        else if(lastCharIsDigit) {
             input = input.slice(0, -1);
         }
     }
 
     setEmptyInputToZero();
     answerBox.textContent = input;
+}
+
+function numberContainsDecimal() {
+    for (let i = 1; i <= input.length; i++) {
+        if (input.at(-i) === '.') {
+            return true;
+        }
+        else if (isOperator(input.at(-i))) {
+            return false;
+        }
+    }
+    return false;
 }
 
 function setEmptyInputToZero() {
@@ -116,8 +128,12 @@ function isDigit(char) {
     return +char >= 0 && +char < 10 && char !== " ";
 }
 
-function lastCharWasDigit() {
+function lastCharIsDigit() {
     return isDigit(input.at(-1));
+}
+
+function lastCharIsDecimal() {
+    return input.at(-1) === '.';
 }
 
 function scrollFullyLeft(element) {
