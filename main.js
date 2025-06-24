@@ -6,8 +6,6 @@ let input;
 let decimalAvailable = true;
 input = answerBox.textContent;
 
-// button1 = document.querySelector("data-button='" + 1 + "']");
-
 buttons.forEach(button => {
     let char = convertButtonTextToKey(button.textContent);
 
@@ -27,6 +25,10 @@ document.addEventListener("keyup", (event) => {
     delete pressedKeys[event.key];
 });
 
+function metaPressed() {
+    return pressedKeys.Meta === true;
+}
+
 function convertButtonTextToKey(buttonText) {
     if (buttonText === "DEL")
         return "Backspace";
@@ -34,10 +36,6 @@ function convertButtonTextToKey(buttonText) {
         return "Meta + Backspace";
     else
         return buttonText;
-}
-
-function metaPressed() {
-    return pressedKeys.Meta === true;
 }
 
 function handleInput(char) {
@@ -64,13 +62,13 @@ function isValidInput(char) {
 
 function appendInput(char) {
     if (isDigit(char)) {
-        if (input === "0") {
+        if (input === "0" || input === "Infinity") {
             input = "";
         }
-        input += char;
+        input += +char;
     }
 
-    if ((char === "+" || char === "-" || char === "*" || char === "/") && lastCharWasDigit()) {
+    if (isOperator(char) && lastCharWasDigit()) {
         decimalAvailable = true;
         input += " " + char + " ";
     }
@@ -80,11 +78,42 @@ function appendInput(char) {
         input += char;
     }
 
+    if (char === "=" || char === "Enter") {
+        input = eval(input).toString();
+    }
+
+    if (pressedKeys["Meta"] && char === "Backspace") {
+        input = "";
+    }
+    else if (char === "Backspace") {
+        if (lastCharIsOperator()) {
+            input = input.slice(0, -3);
+        }
+        else if(lastCharWasDigit) {
+            input = input.slice(0, -1);
+        }
+    }
+
+    setEmptyInputToZero();
     answerBox.textContent = input;
 }
 
+function setEmptyInputToZero() {
+    if (input === "") {
+        input = "0";
+    }
+}
+
+function lastCharIsOperator() {
+    return isOperator(input.at(-2));
+}
+
+function isOperator(char) {
+    return char === '+' || char === '-' || char === '*' || char === '/';
+}
+
 function isDigit(char) {
-    return char >= 0 && char < 10 && char !== " ";
+    return +char >= 0 && +char < 10 && char !== " ";
 }
 
 function lastCharWasDigit() {
