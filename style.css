@@ -14,12 +14,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* border: solid lime 2px; */
 }
 
 .calculator {
-    /* border: solid red 2px; */
-    /* padding: 12px; */
     border-radius: 8px;
 }
 
@@ -54,7 +51,19 @@ button {
     background-color: #150578;
 }
 
+button.double-width {
+    width: 208px;
+}
+
 .symbol {
     background-color: #192BC2;
     font-weight: 300;
+}
+
+.small-font {
+    font-size: 48px;
+}
+
+.bright {
+    background-color: #280AEB;
 }

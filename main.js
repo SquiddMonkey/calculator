@@ -50,8 +50,10 @@ function isValidInput(char) {
         char === "-" ||
         char === "*" ||
         char === "/" ||
+        char === "%" ||
         char === "." ||
         char === "Backspace" ||
+        char === "Meta + Backspace" ||
         char === "=" ||
         char === "Enter") {
         return true;
@@ -67,8 +69,12 @@ function appendInput(char) {
         input += +char;
     }
 
-    if (isOperator(char) && (lastCharIsDigit() || lastCharIsDecimal())) {
+    if (isOperator(char) && (lastCharIsDigit() || lastCharIsDecimal() || lastCharIsPercent())) {
         input += " " + char + " ";
+    }
+
+    if (char === "%" && (lastCharIsDigit() || lastCharIsDecimal())) {
+        input += char;
     }
 
     if (char === "." && !numberContainsDecimal()) {
@@ -82,7 +88,7 @@ function appendInput(char) {
         input = eval(input).toString();
     }
 
-    if (pressedKeys["Meta"] && char === "Backspace") {
+    if (pressedKeys["Meta"] && char === "Backspace" || char === "Meta + Backspace") {
         input = "";
     }
     else if (char === "Backspace") {
@@ -134,6 +140,10 @@ function lastCharIsDigit() {
 
 function lastCharIsDecimal() {
     return input.at(-1) === '.';
+}
+
+function lastCharIsPercent() {
+    return input.at(-1) === '%';
 }
 
 function scrollFullyLeft(element) {
