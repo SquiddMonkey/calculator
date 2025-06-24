@@ -84,7 +84,9 @@ function appendInput(char) {
 
     if (char === "=" || char === "Enter") {
         evaluateAllPercents();
-        input = eval(input).toString();
+        input = eval(input);
+        input = roundToDecimalPlace(input, 8);
+        input = input.toString();
     }
 
     if (pressedKeys["Meta"] && char === "Backspace" || char === "Meta + Backspace") {
@@ -101,6 +103,10 @@ function appendInput(char) {
 
     setEmptyInputToZero();
     answerBox.textContent = input;
+}
+
+function roundToDecimalPlace(number, decimalPlaces) {
+    return Math.round(number * (10 ** decimalPlaces)) / (10 ** decimalPlaces);
 }
 
 function evaluateAllPercents() {
