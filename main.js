@@ -61,7 +61,7 @@ function isValidInput(char) {
 
 function appendInput(char) {
     if (isDigit(char) && !lastCharIsPercent()) {
-        if (input === "0" || input === "Infinity") {
+        if (input === "0" || input === "Infinity" || input === "NaN") {
             input = "";
         }
         input += +char;
