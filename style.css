@@ -49,6 +49,7 @@ button {
     border-radius: 12px;
     border-style: solid;
     background-color: #150578;
+    transition: opacity 0.1s;
 }
 
 button.double-width {
@@ -68,6 +69,6 @@ button.double-width {
     background-color: #280AEB;
 }
 
-/* button:hover {
-
-} */
+button:hover {
+    opacity: 0.9;
+}
