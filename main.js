@@ -83,6 +83,7 @@ function appendInput(char) {
     }
 
     if (char === "=" || char === "Enter") {
+        deselectActiveElement();
         evaluateAllPercents();
         input = eval(input);
         input = roundToDecimalPlace(input, 8);
@@ -103,6 +104,12 @@ function appendInput(char) {
 
     setEmptyInputToZero();
     answerBox.textContent = input;
+}
+
+function deselectActiveElement() {
+    if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+    }
 }
 
 function roundToDecimalPlace(number, decimalPlaces) {
