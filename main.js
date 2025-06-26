@@ -64,6 +64,9 @@ function appendInput(char) {
         if (input === "0" || input === "Infinity" || input === "NaN") {
             input = "";
         }
+        if (isOperator(input.at(-3)) && input.at(-2) === ' ' && input.at(-1) === '0') {
+            input = input.slice(0, -1);
+        }
         input += +char;
     }
 
