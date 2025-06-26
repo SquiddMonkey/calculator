@@ -98,7 +98,7 @@ function appendInput(char) {
         if (lastCharIsOperator()) {
             input = input.slice(0, -3);
         }
-        else if(lastCharIsDigit() || lastCharIsDecimal() || lastCharIsPercent()) {
+        else if(lastCharIsDigit() || lastCharIsDecimal() || lastCharIsPercent() || input.at(-1) === "-") {
             input = input.slice(0, -1);
         }
     }
