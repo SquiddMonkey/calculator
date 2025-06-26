@@ -247,7 +247,7 @@ function setEmptyInputToZero() {
 }
 
 function lastCharIsOperator() {
-    return isOperator(input.at(-2));
+    return isOperator(input.at(-2)) && input.at(-1) === ' ';
 }
 
 function isOperator(char) {
