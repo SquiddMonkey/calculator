@@ -82,10 +82,10 @@ function appendInput(char) {
         input += char;
     }
 
-    if (char === "=" || char === "Enter") {
-        deselectActiveElement();
-        evaluateAllPercents();
-        input = eval(input);
+    if ((char === "=" || char === "Enter") && !lastCharIsOperator()) {
+        input = removeSpaces(input);
+        evaluateAll();
+        // input = eval(input);
         input = roundToDecimalPlace(input, 8);
         input = input.toString();
     }
@@ -102,8 +102,110 @@ function appendInput(char) {
         }
     }
 
+    deselectActiveElement();
     setEmptyInputToZero();
     answerBox.textContent = input;
+}
+
+function evaluateAll() {
+    input = replacePercents(input);
+    input = negativeToTilde(input);
+    input = evaluateLeftToRight(/[*/]/, input);
+    input = evaluateLeftToRight(/[+-]/, input);
+    input = tildeToNegative(input);
+}
+
+function evaluateLeftToRight(operatorList, string) {
+    // Find the first index that matches an operator from the list
+    let operatorIndex = string.search(operatorList);
+    let a, b;
+
+    // Keep evaluating while there are still operators in the string
+    while (operatorIndex !== -1) {
+        let operator = string.at(operatorIndex);
+        a = getNumBeforeOperator(operatorIndex, string);
+        b = getNumAfterOperator(operatorIndex, string);
+        let answer;
+
+        switch (operator) {
+            case '*':
+                answer = mul(a, b);
+                break;
+            case '/':
+                answer = div(a, b);
+                break;
+            case '+':
+                answer = add(a, b);
+                break;
+            case '-':
+                answer = sub(a, b);
+                break;
+        }
+
+        // If answer negative, replace - sign with with ~
+        answer = negativeToTilde(answer);
+
+        // Replace expression with evaluated answer
+        let expression = a.toString() + operator + b.toString();
+        expression = negativeToTilde(expression);
+        string = string.replace(expression, answer);
+
+        operatorIndex = string.search(operatorList);
+    }
+
+    return string;
+}
+
+function negativeToTilde(num) {
+    if (num < 0) {
+        num *= -1;
+        num = "~" + num;
+    }
+    else if (num.toString().at(0) === '-') {
+        num = num.slice(1);
+        num = "~" + num;
+    }
+    return num;
+}
+
+function tildeToNegative(num) {
+    if (num.at(0) === '~') {
+        num = num.slice(1);
+        num *= -1;
+    }
+    return num;
+}
+
+function getNumBeforeOperator(index, string) {
+    let i = index - 1;
+    let number = "";
+
+    while (string.at(i) && i >= 0 && string.at(i).match(/[0-9.~]/)) {
+        number = string.at(i) + number;
+        i--;
+    }
+    
+    number = tildeToNegative(number);
+
+    return +number;
+}
+
+function getNumAfterOperator(index, string) {
+    let i = index + 1;
+    let number = "";
+
+    while (string.at(i) && i >= 0 && string.at(i).match(/[0-9.~]/)) {
+        number = number + string.at(i);
+        i++;
+    }
+
+    number = tildeToNegative(number);
+    
+    return +number;
+}
+
+function removeSpaces(text) {
+    return text.replaceAll(' ', "");
 }
 
 function deselectActiveElement() {
@@ -116,8 +218,8 @@ function roundToDecimalPlace(number, decimalPlaces) {
     return Math.round(number * (10 ** decimalPlaces)) / (10 ** decimalPlaces);
 }
 
-function evaluateAllPercents() {
-    input = input.replace(/%/g, "/100");
+function replacePercents(input) {
+    return input.replace(/%/g, "/100");
 }
 
 function numberContainsDecimal() {
