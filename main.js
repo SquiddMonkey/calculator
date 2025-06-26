@@ -83,9 +83,7 @@ function appendInput(char) {
     }
 
     if ((char === "=" || char === "Enter") && !lastCharIsOperator()) {
-        input = removeSpaces(input);
         evaluateAll();
-        // input = eval(input);
         input = roundToDecimalPlace(input, 8);
         input = input.toString();
     }
@@ -108,6 +106,8 @@ function appendInput(char) {
 }
 
 function evaluateAll() {
+    input = removeSpaces(input);
+    input = removeTrailingDecimals(input);
     input = replacePercents(input);
     input = negativeToTilde(input);
     input = evaluateLeftToRight(/[*/]/, input);
@@ -184,7 +184,6 @@ function getNumBeforeOperator(index, string) {
         number = string.at(i) + number;
         i--;
     }
-    
     number = tildeToNegative(number);
 
     return +number;
@@ -206,6 +205,13 @@ function getNumAfterOperator(index, string) {
 
 function removeSpaces(text) {
     return text.replaceAll(' ', "");
+}
+
+function removeTrailingDecimals(text) {
+    if (text.at(-1) === '.') {
+        text = text.slice(0, -1);
+    }
+    return text.replaceAll(/\.(?=[-+*/%])/g, "");
 }
 
 function deselectActiveElement() {
