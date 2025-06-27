@@ -87,7 +87,7 @@ function appendInput(char) {
 
     if ((char === "=" || char === "Enter") && !lastCharIsOperator()) {
         evaluateAll();
-        input = roundToDecimalPlace(input, 8);
+        input = roundToDecimalPlace(input, 6);
         input = input.toString();
     }
 
