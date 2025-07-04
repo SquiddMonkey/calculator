@@ -86,7 +86,9 @@ function appendInput(char) {
     }
 
     if ((char === "=" || char === "Enter") && !lastCharIsOperator()) {
-        evaluateAll();
+        input = replacePercents(input);
+        // evaluateAll(); // This line turns on my math evaluation logic, which breaks with some decimals
+        input = eval(input); // Comment this line out to use my math logic
         input = roundToDecimalPlace(input, 6);
         input = input.toString();
     }
@@ -111,7 +113,6 @@ function appendInput(char) {
 function evaluateAll() {
     input = removeSpaces(input);
     input = removeTrailingDecimals(input);
-    input = replacePercents(input);
     input = negativeToTilde(input);
     input = evaluateLeftToRight(/[*/]/, input);
     input = evaluateLeftToRight(/[+-]/, input);
