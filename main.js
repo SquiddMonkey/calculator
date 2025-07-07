@@ -78,7 +78,7 @@ function appendInput(char) {
         input += char;
     }
 
-    if (char === "." && !numberContainsDecimal() &&!lastCharIsPercent()) {
+    if (char === "." && !numberContainsDecimal() &&!lastCharIsPercent() && !input.includes("Infinity") && input !== "NaN") {
         if (lastCharIsOperator()) {
             input += "0";
         }
